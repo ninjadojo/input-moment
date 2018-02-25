@@ -9,7 +9,7 @@ export default class InputMoment extends Component {
     prevMonthIcon: 'ion-ios-arrow-left',
     nextMonthIcon: 'ion-ios-arrow-right',
     minStep: 1,
-    hideTabs: false
+    hideTabs: false,
     hourStep: 1,
     tab: 0
   };
@@ -29,7 +29,7 @@ export default class InputMoment extends Component {
   };
 
   componentWillReceiveProps = nextProps => {
-    if (this.props.tab !== nextProps.tab) this.setState({tab});
+    if (this.props.tab !== nextProps.tab) this.setState({tab:nextProps.tab});
   };
 
   render() {
