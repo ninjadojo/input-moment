@@ -9,12 +9,13 @@ export default class InputMoment extends Component {
     prevMonthIcon: 'ion-ios-arrow-left',
     nextMonthIcon: 'ion-ios-arrow-right',
     minStep: 1,
-    hourStep: 1,
     hideTabs: false
+    hourStep: 1,
+    tab: 0
   };
 
   state = {
-    tab: 0
+    tab: this.props.tab || 0
   };
 
   handleClickTab = (e, tab) => {
@@ -27,8 +28,12 @@ export default class InputMoment extends Component {
     if (this.props.onSave) this.props.onSave();
   };
 
+  componentWillReceiveProps = nextProps => {
+    if (this.props.tab !== nextProps.tab) this.setState({tab});
+  };
+
   render() {
-    const { tab } = this.state;
+    const activeTab = this.state.tab;
     const {
       moment: m,
       className,
@@ -38,23 +43,27 @@ export default class InputMoment extends Component {
       hourStep,
       onSave,
       hideTabs,
+      tab,
       ...props
     } = this.props;
+
     const cls = cx('m-input-moment', className);
+    const dateActive = { 'is-active': activeTab === 0 };
+    const timeActive = { 'is-active': activeTab === 1 };
 
     return (
       <div className={cls} {...props}>
         {!hideTabs ? <div className="options">
           <button
             type="button"
-            className={cx('ion-calendar im-btn', { 'is-active': tab === 0 })}
+            className={cx('ion-calendar im-btn', dateActive)}
             onClick={e => this.handleClickTab(e, 0)}
           >
             Date
           </button>
           <button
             type="button"
-            className={cx('ion-clock im-btn', { 'is-active': tab === 1 })}
+            className={cx('ion-clock im-btn', timeActive)}
             onClick={e => this.handleClickTab(e, 1)}
           >
             Time
@@ -64,14 +73,14 @@ export default class InputMoment extends Component {
 
         <div className="tabs">
           <Calendar
-            className={cx('tab', { 'is-active': tab === 0 })}
+            className={cx('tab', dateActive)}
             moment={m}
             onChange={this.props.onChange}
             prevMonthIcon={this.props.prevMonthIcon}
             nextMonthIcon={this.props.nextMonthIcon}
           />
           <Time
-            className={cx('tab', { 'is-active': tab === 1 })}
+            className={cx('tab', timeActive)}
             moment={m}
             minStep={this.props.minStep}
             hourStep={this.props.hourStep}
